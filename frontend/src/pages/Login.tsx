@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
+const API = import.meta.env.VITE_API_URL;
+
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,7 +13,8 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${API}/api/auth/login`
+,
         { email, password }
       );
 
@@ -24,13 +28,13 @@ const Login = () => {
   return (
     <div className="relative min-h-screen bg-black flex items-center justify-center px-6 overflow-hidden">
 
-      {/* Subtle Premium Glow */}
+     
       <div className="absolute w-[700px] h-[700px] bg-amber-400/5 blur-[160px] rounded-full top-[-250px] left-[-250px]" />
       <div className="absolute w-[600px] h-[600px] bg-amber-300/5 blur-[160px] rounded-full bottom-[-250px] right-[-250px]" />
 
       <div className="relative w-full max-w-6xl grid md:grid-cols-2 gap-24 items-center">
 
-        {/* Left - Login Card */}
+       
         <div className="bg-neutral-900/90 backdrop-blur-md border border-neutral-800 rounded-3xl p-14 shadow-2xl">
 
           <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">
@@ -85,7 +89,7 @@ const Login = () => {
           </p>
         </div>
 
-        {/* Right - Visual */}
+       
         <div className="hidden md:flex justify-center items-center">
           <div className="bg-neutral-900 p-8 rounded-3xl border border-neutral-800 shadow-xl">
             <img

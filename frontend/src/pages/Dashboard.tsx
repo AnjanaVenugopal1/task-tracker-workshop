@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL;
+
 const Dashboard = () => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [title, setTitle] = useState("");
@@ -19,7 +21,7 @@ const Dashboard = () => {
   const fetchTasks = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5000/api/tasks", {
+      const res = await axios.get(`${API}/api/tasks`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setTasks(res.data);
@@ -68,7 +70,7 @@ const Dashboard = () => {
         formData.append("file", file);
       }
 
-      await axios.post("http://localhost:5000/api/tasks", formData, {
+      await axios.post(`${API}/api/tasks`, formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -89,7 +91,7 @@ const Dashboard = () => {
       setSubmitting(true);
 
       await axios.put(
-        `http://localhost:5000/api/tasks/${editingId}`,
+        `${API}/api/tasks/${editingId}`,
         {
           title,
           description,
@@ -116,7 +118,7 @@ const Dashboard = () => {
     );
     if (!confirmDelete) return;
 
-    await axios.delete(`http://localhost:5000/api/tasks/${id}`, {
+    await axios.delete(`${API}/api/tasks/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -130,13 +132,11 @@ const Dashboard = () => {
 
   return (
     <div className="relative min-h-screen bg-black text-white px-8 py-12 overflow-hidden">
-
       {/* Premium Background Glow */}
       <div className="absolute w-[700px] h-[700px] bg-amber-400/5 blur-[160px] rounded-full top-[-250px] left-[-250px]" />
       <div className="absolute w-[600px] h-[600px] bg-amber-300/5 blur-[160px] rounded-full bottom-[-250px] right-[-250px]" />
 
       <div className="relative max-w-7xl mx-auto">
-
         {/* Header */}
         <div className="flex justify-between items-center mb-14">
           <div>
@@ -156,7 +156,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        {/* Create / Edit  */}
+        {/* Form Section */}
         <div className="bg-neutral-900/90 border border-neutral-800 rounded-3xl p-10 shadow-2xl mb-14 backdrop-blur-md">
           <h2 className="text-2xl font-semibold mb-8">
             {editingId ? "Refine Your Task" : "Craft a New Task"}
@@ -240,7 +240,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* task */}
+        {/* Tasks */}
         {loading ? (
           <div className="text-center text-neutral-500 py-12">
             Loading your tasks...
@@ -280,26 +280,24 @@ const Dashboard = () => {
                   Due: {task.due_date?.split("T")[0]}
                 </div>
 
-                {/* File Preview */}
+                
                 {task.file_url && (
                   <div className="mt-4">
                     {task.file_url.match(/\.(jpeg|jpg|png|gif|avif)$/i) ? (
                       <img
-                      src={`http://localhost:5000${task.file_url}`}
-                      alt="Task Attachment"
-                      className="w-full h-64 rounded-2xl object-cover border border-neutral-800 shadow-inner"
-
-                    />
-                    
+                        src={`${API}${task.file_url}`}
+                        alt="Task Attachment"
+                        className="w-full h-64 rounded-2xl object-cover border border-neutral-800 shadow-inner"
+                      />
                     ) : task.file_url.match(/\.pdf$/i) ? (
                       <iframe
-                        src={`http://localhost:5000${task.file_url}`}
+                        src={`${API}${task.file_url}`}
                         className="w-full h-64 rounded-xl border border-neutral-700"
                         title="PDF Preview"
                       />
                     ) : (
                       <a
-                        href={`http://localhost:5000${task.file_url}`}
+                        href={`${API}${task.file_url}`}
                         target="_blank"
                         rel="noreferrer"
                         className="text-amber-400 hover:underline text-sm"
